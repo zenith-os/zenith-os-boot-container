@@ -16,9 +16,9 @@ RUN fakechroot -- fakeroot -- pacman -Sy -r /bootfs --noconfirm \
 
 COPY rootfs/* /bootfs/*
 
-RUN fakechroot -- fakeroot -- chroot /bootfs update-ca-trust
-RUN fakechroot -- fakeroot -- chroot /bootfs pacman-key --init
-RUN fakechroot -- fakeroot -- chroot /bootfs pacman-key --populate
+# RUN fakechroot -- fakeroot -- chroot /bootfs update-ca-trust
+# RUN fakechroot -- fakeroot -- chroot /bootfs pacman-key --init
+# RUN fakechroot -- fakeroot -- chroot /bootfs pacman-key --populate
 
 COPY exclude .
 
