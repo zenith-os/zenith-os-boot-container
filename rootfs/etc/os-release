@@ -1,0 +1,11 @@
+NAME="Zenith OS"
+PRETTY_NAME="Zenith"
+ID=zenith
+BUILD_ID=rolling 
+ANSI_COLOR="38;2;183;8;23"
+HOME_URL="https://zenithos.github.com/"
+DOCUMENTATION_URL="https://zenithos.github.com/wiki"
+SUPPORT_URL="https://zenithos.github.com/support"
+BUG_REPORT_URL="https://zenithos.github.com/bugs"
+PRIVACY_POLICY_URL="https://zenithos.github.com/privacy-policy"
+LOGO=zenith-logo

@@ -1,0 +1,39 @@
+name: Build and Push Container Image
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0"
+
+env:
+  REGISTRY_USER: ${{ github.actor }}
+  REGISTRY_PASSWORD: ${{ github.token }}
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Podman
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+
+      - name: Build container image
+        run: |
+          BUILD_DATE=$(date +%Y%m%d)
+          TAG="$BUILD_DATE-boot"
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os:$TAG"
+          podman build -t "$IMAGE_NAME" -f Containerfile .
+
+      - name: Push container image to GHCR
+        run: |
+          BUILD_DATE=$(date +%Y%m%d)
+          TAG="$BUILD_DATE-boot"
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os:$TAG"
+          podman push "$IMAGE_NAME"
