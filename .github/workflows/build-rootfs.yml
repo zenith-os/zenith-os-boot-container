@@ -30,7 +30,7 @@ jobs:
             --xattrs \
             --acls \
             --exclude-from="$PWD/exclude" \
-            -C "/rootfs" \
+            -C "$PWD/rootfs" \
             -c . \
             -f "$PWD/zenithos-rootfs.tar"
 
