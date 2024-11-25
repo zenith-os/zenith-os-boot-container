@@ -1,0 +1,37 @@
+name: Build and Upload RootFS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Run the Docker container
+      - name: Run Docker container
+        run: |
+          docker run \
+            --env PS1="ADC(\#)[\d \T:\w]\\$ " \
+            --interactive \
+            --privileged \
+            --rm \
+            --volume "$PWD/rootfs:/rootfs" \
+            "index.docker.io/library/archlinux:latest" \
+            /bin/bash -c "mkdir -p /rootfs && pacstrap -K /rootfs base linux && echo 'Rootfs created successfully'"
+
+      # Create a tar.zst archive from ./rootfs
+      - name: Compress rootfs directory
+        run: |
+          tar --zstd -cvf rootfs.tar.zst rootfs
+
+      # Upload the artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-archive
+          path: rootfs.tar.zst
