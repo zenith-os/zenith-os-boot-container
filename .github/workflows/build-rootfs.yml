@@ -22,7 +22,7 @@ jobs:
             --rm \
             --volume "$PWD/rootfs:/rootfs" \
             "index.docker.io/library/archlinux:latest" \
-            /bin/bash -c "mkdir -p /rootfs && pacstrap -K /rootfs base linux && echo 'Rootfs created successfully'"
+            /bin/bash -c "pacman -Sy arch-install-scripts --noconfirm && mkdir -p /rootfs && pacstrap -K /rootfs base linux --no-confirm && echo 'Rootfs created successfully'"
 
       # Create a tar.zst archive from ./rootfs
       - name: Compress rootfs directory
