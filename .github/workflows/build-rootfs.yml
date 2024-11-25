@@ -33,12 +33,12 @@ jobs:
                 --interactive \
                 --privileged \
                 --rm \
-                --volume "$PWD/rootfs:/rootfs"
-                --volume "$PWD/src:/src"
+                --volume "$PWD/rootfs:/rootfs" \
+                --volume "$PWD/src:/src" \
                 --volume "$PWD/build:/build" \
                 "index.docker.io/library/archlinux:latest" \
                 /bin/bash -c "tar --numeric-owner --xattrs --acls --exclude-from=/src/exclude -C /rootfs -c . -f /build/zenithos-rootfs.tar"
-                
+
       - name: Upload zst artifact
         run: |
             docker run \
@@ -46,7 +46,7 @@ jobs:
                 --interactive \
                 --privileged \
                 --rm \
-                --volume "$PWD/build:/build"
+                --volume "$PWD/build:/build" \
                 "index.docker.io/library/archlinux:latest" \
                 /bin/bash -c "zstd --long -T0 -8 /build/zenithos-rootfs.tar && sha256sum zenithos-rootfs.tar.zst > zenithos-rootfs.tar.zst.SHA256
 
