@@ -24,14 +24,29 @@ jobs:
             "index.docker.io/library/archlinux:latest" \
             /bin/bash -c "pacman -Sy arch-install-scripts --noconfirm && mkdir -p /rootfs && pacstrap -K /rootfs base linux && echo 'Rootfs created successfully'"
 
-      # Create a tar.zst archive from ./rootfs
-      - name: Compress rootfs directory
+      - name: Create rootfs tarball
         run: |
-          tar --zstd -cvf rootfs.tar.zst rootfs
+          tar --numeric-owner \
+            --xattrs \
+            --acls \
+            --exclude-from="$PWD/exclude"
+            -C "/rootfs" \
+            -c . \
+            -f "$PWD/zenithos-rootfs.tar"
+
+      - name: Create rootfs tarball
+        run: |
+          zstd --long -T0 -8 "$PWD/zenithos-rootfs.tar" && sha256sum "zenithos-rootfs.tar.zst" > "zenithos-rootfs.tar.zst.SHA256"
 
       # Upload the artifact
-      - name: Upload artifact
+      - name: Upload zst artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rootfs-archive
-          path: rootfs.tar.zst
+          name: zenithos-rootfs.tar.zst
+          path: zenithos-rootfs.tar.zst
+
+      - name: Upload zst artifact checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: zenithos-rootfs.tar.zst.SHA256
+          path: zenithos-rootfs.tar.zst.SHA256
