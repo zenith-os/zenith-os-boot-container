@@ -50,6 +50,9 @@ jobs:
                 "index.docker.io/library/archlinux:latest" \
                 /bin/bash -c "zstd --long -T0 -8 /build/zenithos-rootfs.tar"
 
+      - name: Set permissions on build directory
+        run: chmod -R 777 ./build
+            
       - name: Create SHA256 checksum
         run: |
             sha256sum ./build/zenithos-rootfs.tar.zst > ./build/zenithos-rootfs.tar.zst.SHA256
