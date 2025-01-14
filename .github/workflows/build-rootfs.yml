@@ -1,7 +1,9 @@
-name: Build and Upload RootFS
+name: Build and Upload Rootfs
 
 on:
   workflow_dispatch:
+  # schedule:
+  #   - cron: "0 0 * * 0"
 
 jobs:
   build-and-upload:
