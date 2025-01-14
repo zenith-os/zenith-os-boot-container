@@ -10,11 +10,11 @@ RUN mkdir -m 0555 -p /bootfs/{sys,proc}
 RUN pacman-key --gpgdir /bootfs/etc/pacman.d/gnupg --init
 
 RUN fakechroot -- fakeroot -- pacman -Sy -r /bootfs --noconfirm \
-    linux-zen linux-firmware linux-zen-headers \
+    base base-devel linux-zen linux-firmware linux-zen-headers \
     ukify btrfs-progs intel-ucode amd-ucode podman toolbox \
     networkmanager nano git vim openssh sudo zsh 
 
-COPY rootfs/* /bootfs/*
+COPY rootfs/* /bootfs/
 
 # RUN fakechroot -- fakeroot -- chroot /bootfs update-ca-trust
 # RUN fakechroot -- fakeroot -- chroot /bootfs pacman-key --init
