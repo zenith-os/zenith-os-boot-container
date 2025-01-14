@@ -26,14 +26,14 @@ jobs:
 
       - name: Build container image
         run: |
-          TAG="$(date +%Y%m%d%H%M%S)"
+          TAG="$(date +%Y%m%d)"
           IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os:$TAG"
           podman build -t "$IMAGE_NAME" -f Containerfile .
           echo "Built image: $IMAGE_NAME"
 
       - name: Push container image
         run: |
-          TAG="$(date +%Y%m%d%H%M%S)"
+          TAG="$(date +%Y%m%d)"
           IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os:$TAG"
           podman push "$IMAGE_NAME"
           echo "Pushed image: $IMAGE_NAME"
