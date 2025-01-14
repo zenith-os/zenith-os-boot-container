@@ -20,23 +20,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Podman
-        uses: redhat-actions/podman-login@v1
-        with:
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
-          registry: ${{ env.IMAGE_REGISTRY }}
+      - name: Log in to GHCR
+        run: |
+          echo "${{ env.REGISTRY_PASSWORD }}" | podman login ghcr.io -u "${{ env.REGISTRY_USER }}" --password-stdin
 
       - name: Build container image
         run: |
-          BUILD_DATE=$(date +%Y%m%d)
-          TAG="$BUILD_DATE-boot"
+          TAG="$(date +%Y%m%d%H%M%S)"
           IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os:$TAG"
           podman build -t "$IMAGE_NAME" -f Containerfile .
+          echo "Built image: $IMAGE_NAME"
 
-      - name: Push container image to GHCR
+      - name: Push container image
         run: |
-          BUILD_DATE=$(date +%Y%m%d)
-          TAG="$BUILD_DATE-boot"
+          TAG="$(date +%Y%m%d%H%M%S)"
           IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os:$TAG"
           podman push "$IMAGE_NAME"
+          echo "Pushed image: $IMAGE_NAME"
