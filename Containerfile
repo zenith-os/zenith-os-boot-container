@@ -14,7 +14,7 @@ RUN fakechroot -- fakeroot -- pacman -Sy -r /bootfs --noconfirm \
     ukify btrfs-progs intel-ucode amd-ucode podman toolbox \
     networkmanager nano git vim openssh sudo zsh 
 
-COPY rootfs/* /bootfs/
+COPY rootfs/etc/* /bootfs/etc
 
 # RUN fakechroot -- fakeroot -- chroot /bootfs update-ca-trust
 # RUN fakechroot -- fakeroot -- chroot /bootfs pacman-key --init
