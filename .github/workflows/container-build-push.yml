@@ -30,13 +30,13 @@ jobs:
       - name: Build container image
         run: |
           BUILD_DATE=$(date +%Y%m%d)
-          TAG="$BUILD_DATE-boot"
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os-test:$TAG"
+          TAG="$BUILD_DATE"
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenithos-bootc:$TAG"
           podman build -t "$IMAGE_NAME" -f Containerfile .
 
       - name: Push container image to GHCR
         run: |
           BUILD_DATE=$(date +%Y%m%d)
-          TAG="$BUILD_DATE-boot"
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenith-os-test:$TAG"
+          TAG="$BUILD_DATE"
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/zenithos-bootc:$TAG"
           podman push "$IMAGE_NAME"
