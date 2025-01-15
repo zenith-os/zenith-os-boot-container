@@ -25,7 +25,7 @@ jobs:
             /bin/bash -c "pacman -Sy arch-install-scripts --noconfirm && mkdir -p /rootfs && \
               pacstrap -K /rootfs base base-devel linux-zen linux-firmware linux-zen-headers \
               ukify btrfs-progs intel-ucode amd-ucode podman toolbox networkmanager \
-              nano git vim openssh zsh acpid sudo mandb man-pages bluez bluez-utils \
+              nano git vim openssh zsh acpid sudo man-db man-pages bluez bluez-utils \
               pipewire alsa-utils pipewire-pulse firefox plasma && \
               echo 'Rootfs created successfully'"
 
