@@ -22,35 +22,40 @@ jobs:
             --rm \
             --volume "$PWD/rootfs:/rootfs" \
             "index.docker.io/library/archlinux:latest" \
-            /bin/bash -c "pacman -Sy arch-install-scripts --noconfirm && mkdir -p /rootfs && pacstrap -K /rootfs base linux && echo 'Rootfs created successfully'"
+            /bin/bash -c "pacman -Sy arch-install-scripts --noconfirm && mkdir -p /rootfs && \
+              pacstrap -K /rootfs base base-devel linux-zen linux-firmware linux-zen-headers \
+              ukify btrfs-progs intel-ucode amd-ucode podman toolbox networkmanager \
+              nano git vim openssh zsh acpid sudo mandb man-pages bluez bluez-utils \
+              pipewire alsa-utils pipewire-pulse firefox plasma && \
+              echo 'Rootfs created successfully'"
 
       - name: Copy exclude file
         run: |
-            mkdir -p src && cp exclude ./src
+          mkdir -p src && cp exclude ./src
 
       - name: Create rootfs tarball
         run: |
-            docker run \
-                --env PS1="ADC(\#)[\d \T:\w]\\$ " \
-                --interactive \
-                --privileged \
-                --rm \
-                --volume "$PWD/rootfs:/rootfs" \
-                --volume "$PWD/src:/src" \
-                --volume "$PWD/build:/build" \
-                "index.docker.io/library/archlinux:latest" \
-                /bin/bash -c "tar --numeric-owner --xattrs --acls --exclude-from=/src/exclude -C /rootfs -c . -f /build/zenithos-rootfs.tar"
+          docker run \
+              --env PS1="ADC(\#)[\d \T:\w]\\$ " \
+              --interactive \
+              --privileged \
+              --rm \
+              --volume "$PWD/rootfs:/rootfs" \
+              --volume "$PWD/src:/src" \
+              --volume "$PWD/build:/build" \
+              "index.docker.io/library/archlinux:latest" \
+              /bin/bash -c "tar --numeric-owner --xattrs --acls --exclude-from=/src/exclude -C /rootfs -c . -f /build/zenithos-rootfs.tar"
 
       - name: Create zst Archive
         run: |
-            docker run \
-                --env PS1="ADC(\#)[\d \T:\w]\\$ " \
-                --interactive \
-                --privileged \
-                --rm \
-                --volume "$PWD/build:/build" \
-                "index.docker.io/library/archlinux:latest" \
-                /bin/bash -c "zstd --long -T0 -8 /build/zenithos-rootfs.tar ; sha256sum ./build/zenithos-rootfs.tar.zst > ./build/zenithos-rootfs.tar.zst.SHA256"
+          docker run \
+              --env PS1="ADC(\#)[\d \T:\w]\\$ " \
+              --interactive \
+              --privileged \
+              --rm \
+              --volume "$PWD/build:/build" \
+              "index.docker.io/library/archlinux:latest" \
+              /bin/bash -c "zstd --long -T0 -8 /build/zenithos-rootfs.tar ; sha256sum ./build/zenithos-rootfs.tar.zst > ./build/zenithos-rootfs.tar.zst.SHA256"
 
       - name: Upload zst artifact
         uses: actions/upload-artifact@v4
